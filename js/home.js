@@ -4,6 +4,22 @@ let user = {
     labels: {
         labelName: ""
     },
+    sum_greater_than_1:{
+        aggregate:{
+            sum:{
+                grade: 0
+            }
+        },
+
+  
+    },
+    sum_less_or_equal_1:{
+        aggregate:{
+            sum:{
+                grade: 0
+            }
+        },
+    },
     transactions: [],
 };
 async function fetchData() {
@@ -84,6 +100,7 @@ async function home() {
     document.getElementById("labels").innerText = user.labels[0].labelName;
     document.getElementById("xp").innerText = data.data.transaction_aggregate.aggregate.sum.amount;
     barsvg(user.transactions);
+    drawChart(user.sum_greater_than_1.aggregate.sum.grade,user.sum_less_or_equal_1.aggregate.sum.grade)
 }
 
 function barsvg(data) {
@@ -142,5 +159,29 @@ window.addEventListener("resize", () => {
     document.getElementById("barChart").innerHTML = "";
     barsvg(user.transactions);
 });
+function drawChart(passed, failed) {
+    let total = passed + failed;
+    let passedAngle = (passed / total) * Math.PI * 2;
+    console.log(passedAngle)
+    let svg = document.getElementById("chart");
+    let centerX = 100, centerY = 100, radius = 100;
 
+    function createPath(startAngle, endAngle, color) {
+      let x1 = centerX + radius * Math.cos(startAngle);
+      let y1 = centerY + radius * Math.sin(startAngle);
+      let x2 = centerX + radius * Math.cos(endAngle);
+      let y2 = centerY + radius * Math.sin(endAngle);
+      
+      let largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+      let path = `M ${centerX},${centerY} L ${x1},${y1} A ${radius},${radius} 0 ${largeArc},1 ${x2},${y2} Z`;
+      
+      let pathElem = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      pathElem.setAttribute("d", path);
+      pathElem.setAttribute("fill", color);
+      svg.appendChild(pathElem);
+    }
+
+    createPath(0, passedAngle, "green");
+    createPath(passedAngle, Math.PI * 2, "red");
+  }
 home();
