@@ -1,12 +1,10 @@
-/* Reset de base */
-* {
+/* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
-/* Style du body */
 .contienr1 {
     display: flex;
     flex-direction: column;
@@ -15,20 +13,17 @@
     text-align: center;
 }
 
-/* Titre principal */
 h1 {
     color: #333;
     font-size: 2rem;
     margin: 10px 0;
 }
 
-/* Span pour le nom */
 #fillname {
     color: #007bff;
     font-weight: bold;
 }
 
-/* Conteneur des labels */
 #labels {
     display: flex;
     flex-direction: column;
@@ -36,14 +31,12 @@ h1 {
     margin: 20px 0;
 }
 
-/* XP Style */
 #xp {
     font-size: 1.5rem;
     font-weight: bold;
     color: #28a745;
 }
 
-/* Conteneur des graphes */
 .graphs-container {
     display: flex;
     justify-content: center;
@@ -51,7 +44,6 @@ h1 {
     margin-top: 40px;
 }
 
-/* Styles des graphes */
 .graph {
     width: 300px;
     height: 200px;
@@ -64,3 +56,4 @@ h1 {
     font-weight: bold;
     color: #555;
 }
+*/
