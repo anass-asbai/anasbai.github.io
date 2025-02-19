@@ -30,7 +30,7 @@ let user = {
 };
 async function fetchData() {
     const token = localStorage.getItem("token");
-
+    let data
     try {
         const response = await fetch('https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql', {
             method: 'POST',
@@ -107,21 +107,25 @@ async function fetchData() {
                 }`
             })
         });
-        const data = await response.json();
-        return data;
+        data = await response.json();
     } catch (error) {
+        window.location.href = "index.html"
+        localStorage.clear();
         console.error(error);
     }
+    if (!data.data){
+        window.location.href = "index.html"
+        localStorage.clear();
+    }
+    return data;
+
 }
 
 async function home() {
     let data = await fetchData();
-    console.log(data)
     user = data.data.user[0];
-    console.log(user);
     document.getElementById("fillname").innerText = user.firstName + " " + user.lastName;
     document.getElementById("labels").innerText = user.labels[0].labelName;
-    console.log(data.data.transaction_aggregate.aggregate.sum.amount / 100)
     document.getElementById("xp").innerText = data.data.transaction_aggregate.aggregate.sum.amount / 1000;
     logaut()
     lastpush(user.progresses)
@@ -205,7 +209,6 @@ window.addEventListener("resize", () => {
 function drawChart(passed, failed) {
     let total = passed + failed;
     let passedAngle = (passed / total) * Math.PI * 2;
-    console.log(passedAngle)
     let svg = document.getElementById("chart");
     let centerX = 100, centerY = 100, radius = 100;
 
@@ -223,10 +226,10 @@ function drawChart(passed, failed) {
         pathElem.setAttribute("fill", color);
         svg.appendChild(pathElem);
     }
-    let valid=(passed*100)/total;
-    let notvalid=(failed*100)/total;
-    document.getElementById('validcount').innerText=Math.floor(valid)
-    document.getElementById('notvalid').innerText=Math.floor(notvalid)
+    let valid = (passed * 100) / total;
+    let notvalid = (failed * 100) / total;
+    document.getElementById('validcount').innerText = Math.floor(valid)
+    document.getElementById('notvalid').innerText = Math.floor(notvalid)
     createPath(0, passedAngle, "green");
     createPath(passedAngle, Math.PI * 2, "red");
 }

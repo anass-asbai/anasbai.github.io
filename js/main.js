@@ -17,22 +17,22 @@ async function fetchData(token) {
             },
         });
         const data = await response.json();
-        console.log(data )
 
         if (response.ok) {
             localStorage.setItem("token", data)
             window.location.href = "home.html"
+        } else {
+            document.getElementById('error').innerHTML = "User does not exist or password incorrect"
         }
 
     } catch (error) {
-         window.location.href = "index.html"
         console.error(error);
+        document.getElementById('error').innerText = error
     }
 
 
 }
 
 if (localStorage.getItem("token")) {
-    fetchData(token)
-
+    window.location.href = "home.html"
 }
