@@ -1,59 +1,121 @@
-/* {
+/* General Reset */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
 
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Button Styles */
+#logaut {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+#logaut:hover {
+    background-color: #ff6b81;
+}
+
+/* Container Styles */
 .contienr1 {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #f4f4f4;
-    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    color: #2c3e50;
 }
 
 h1 {
-    color: #333;
-    font-size: 2rem;
-    margin: 10px 0;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
 }
 
-#fillname {
-    color: #007bff;
-    font-weight: bold;
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
 }
 
-#labels {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-#xp {
+h3 {
     font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+/* Span Styles */
+#fillname, #xp, #lastpush {
+    color: #3498db;
     font-weight: bold;
-    color: #28a745;
 }
 
-.graphs-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 40px;
+/* Labels Section */
+#labels {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #ecf0f1;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
-.graph {
-    width: 300px;
-    height: 200px;
-    background-color: white;
-    border: 2px solid #ddd;
+/* Chart Styles */
+#barChart, #chart {
+    display: block;
+    margin: 20px auto;
+    background-color: #ecf0f1;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #555;
 }
-*/
+
+/* Valid and Not Valid Styles */
+#validcount, #notvalid {
+    font-weight: bold;
+}
+
+#validcount {
+    color: #2ecc71;
+}
+
+#notvalid {
+    color: #e74c3c;
+}
+
+/* Last Push Section */
+#lastpush {
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    #barChart, #chart {
+        width: 100%;
+        height: auto;
+    }
+}

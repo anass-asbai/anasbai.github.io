@@ -25,9 +25,14 @@ async function fetchData(token) {
         }
 
     } catch (error) {
+         window.location.href = "index.html"
         console.error(error);
     }
 
 
 }
 
+if (localStorage.getItem("token")) {
+    fetchData(token)
+
+}

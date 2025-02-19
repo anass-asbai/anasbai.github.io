@@ -4,22 +4,28 @@ let user = {
     labels: {
         labelName: ""
     },
-    sum_greater_than_1:{
-        aggregate:{
-            sum:{
+    sum_greater_than_1: {
+        aggregate: {
+            sum: {
                 grade: 0
             }
         },
 
-  
+
     },
-    sum_less_or_equal_1:{
-        aggregate:{
-            sum:{
+    sum_less_or_equal_1: {
+        aggregate: {
+            sum: {
                 grade: 0
             }
         },
     },
+    progresses: [{
+        object: {
+            name: "",
+            createdAt: "",
+        }
+    }],
     transactions: [],
 };
 async function fetchData() {
@@ -74,6 +80,22 @@ async function fetchData() {
             }
          }  
       }
+    progresses(
+      limit: 5
+      order_by: [{ id: desc }]
+      where: {
+        _and: [
+          { event: { object: { name: { _eq: "Module" } } } }
+          { isDone: { _eq: true } }
+        ]
+      }
+    ) {
+      object {
+        name
+        createdAt
+        
+      }
+    }
     }
         transaction_aggregate(where: {type: {_eq: "xp"}, event: {object: {type: {_eq: "module"}}}}) {
                         aggregate {
@@ -94,18 +116,39 @@ async function fetchData() {
 
 async function home() {
     let data = await fetchData();
+    console.log(data)
     user = data.data.user[0];
     console.log(user);
     document.getElementById("fillname").innerText = user.firstName + " " + user.lastName;
     document.getElementById("labels").innerText = user.labels[0].labelName;
-    document.getElementById("xp").innerText = data.data.transaction_aggregate.aggregate.sum.amount;
+    console.log(data.data.transaction_aggregate.aggregate.sum.amount / 100)
+    document.getElementById("xp").innerText = data.data.transaction_aggregate.aggregate.sum.amount / 1000;
+    logaut()
+    lastpush(user.progresses)
     barsvg(user.transactions);
-    drawChart(user.sum_greater_than_1.aggregate.sum.grade,user.sum_less_or_equal_1.aggregate.sum.grade)
+    drawChart(user.sum_greater_than_1.aggregate.sum.grade, user.sum_less_or_equal_1.aggregate.sum.grade)
 }
-
+function logaut() {
+    document.getElementById("logaut").addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "index.html";
+    })
+}
+function lastpush(data) {
+    let lastpush = document.getElementById('lastpush')
+    data.forEach((item) => {
+        let projict = document.createElement('div')
+        projict.classList.add('projict')
+        projict.innerHTML = `
+      <div class="projict__name">${item.object.name}</div>
+      `
+        lastpush.appendChild(projict)
+    }
+    )
+}
 function barsvg(data) {
     const svg = document.getElementById("barChart");
-    svg.innerHTML = ""; 
+    svg.innerHTML = "";
     const width = Math.min(window.innerWidth * 0.9, 500);
     const height = 300;
     const padding = 40;
@@ -150,7 +193,7 @@ function barsvg(data) {
         text.setAttribute("y", height - 10);
         text.setAttribute("font-size", "14");
         text.setAttribute("text-anchor", "middle");
-        text.textContent = data[index].amount+"%";
+        text.textContent = data[index].amount + "%";
         svg.appendChild(text);
     });
 }
@@ -167,21 +210,25 @@ function drawChart(passed, failed) {
     let centerX = 100, centerY = 100, radius = 100;
 
     function createPath(startAngle, endAngle, color) {
-      let x1 = centerX + radius * Math.cos(startAngle);
-      let y1 = centerY + radius * Math.sin(startAngle);
-      let x2 = centerX + radius * Math.cos(endAngle);
-      let y2 = centerY + radius * Math.sin(endAngle);
-      
-      let largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
-      let path = `M ${centerX},${centerY} L ${x1},${y1} A ${radius},${radius} 0 ${largeArc},1 ${x2},${y2} Z`;
-      
-      let pathElem = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      pathElem.setAttribute("d", path);
-      pathElem.setAttribute("fill", color);
-      svg.appendChild(pathElem);
-    }
+        let x1 = centerX + radius * Math.cos(startAngle);
+        let y1 = centerY + radius * Math.sin(startAngle);
+        let x2 = centerX + radius * Math.cos(endAngle);
+        let y2 = centerY + radius * Math.sin(endAngle);
 
+        let largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+        let path = `M ${centerX},${centerY} L ${x1},${y1} A ${radius},${radius} 0 ${largeArc},1 ${x2},${y2} Z`;
+
+        let pathElem = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        pathElem.setAttribute("d", path);
+        pathElem.setAttribute("fill", color);
+        svg.appendChild(pathElem);
+    }
+    let valid=(passed*100)/total;
+    let notvalid=(failed*100)/total;
+    document.getElementById('validcount').innerText=Math.floor(valid)
+    document.getElementById('notvalid').innerText=Math.floor(notvalid)
     createPath(0, passedAngle, "green");
     createPath(passedAngle, Math.PI * 2, "red");
-  }
+}
+
 home();
